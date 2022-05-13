@@ -11,6 +11,7 @@ public class NPCObject : MonoBehaviour
     public new AudioSource audio;
     public AudioClip _bite;
     public AudioClip _nakama;
+    public float bounce = 1.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +32,10 @@ public class NPCObject : MonoBehaviour
             if (this.gameObject.tag == "Fork")
             {
                 Debug.Log(transform.name + ": ‚à‚®‚à‚®");
+                Vector3 norm = other.contacts[0].normal;
+                Vector3 vel = other.rigidbody.velocity.normalized;
+                vel += new Vector3(-norm.x * 2, 0f, -norm.z * 2);
+                other.rigidbody.AddForce(vel * bounce, ForceMode.Impulse);
                 audio.PlayOneShot(_bite);
             }
             else

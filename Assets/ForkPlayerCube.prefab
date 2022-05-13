@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1765159017227674043}
   - component: {fileID: 3696847258854932001}
   m_Layer: 0
-  m_Name: Fork
+  m_Name: ForkPlayerCube
   m_TagString: Fork
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -139,6 +139,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 831e64499f2c4b64a908aee76087ce76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _invincible: 0
-  _bite: {fileID: 8300000, guid: 621fb74fa4f97d047b770bb44989e052, type: 3}
   audio: {fileID: 0}
+  _bite: {fileID: 8300000, guid: 621fb74fa4f97d047b770bb44989e052, type: 3}
+  _nakama: {fileID: 8300000, guid: 752f364fcb4df194ba53c0134ee71b9d, type: 3}
+  _p2: {fileID: 0}
+  _npc: {fileID: 0}
+  on_damage: 0
+  bounce: 1

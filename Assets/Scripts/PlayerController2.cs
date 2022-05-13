@@ -19,11 +19,13 @@ public class PlayerController2 : MonoBehaviour
 
     public new AudioSource audio;
     public AudioClip _bite;
+    public AudioClip _nakama;
 
     public PlayerController2 _p2;
     public NPCObject _npc;
     public bool on_damage = false;
 
+    public float bounce = 5.0f;
 
 
     void Start()
@@ -112,30 +114,40 @@ public class PlayerController2 : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
-        if(other.gameObject.tag == "Fruit")
+        if (other.gameObject.tag == "Fruit")
         {
             if (this.gameObject.tag == "Fork")
             {
-                Debug.Log(transform.name+": もぐもぐ");
+                Debug.Log(transform.name + ": もぐもぐ");
+                Vector3 norm = other.contacts[0].normal;
+                Vector3 vel = other.rigidbody.velocity.normalized;
+                vel += new Vector3(-norm.x * 2, 0f, -norm.z * 2);
+                other.rigidbody.AddForce(vel * bounce, ForceMode.Impulse);
                 audio.PlayOneShot(_bite);
             }
             else
             {
                 Debug.Log(transform.name + ": なかま");
+                audio.PlayOneShot(_nakama);
             }
         }
 
-        if(other.gameObject.tag == "Fork")
+        if (other.gameObject.tag == "Fork")
         {
-            if(this.gameObject.tag == "Fruit")
+            if (this.gameObject.tag == "Fruit" && !on_damage)
             {
+                rb.AddForce(2,2,2, ForceMode.Impulse);
+
                 Debug.Log(transform.name + ": ぎゃー");
                 audio.PlayOneShot(_bite);
+
+                OnDamageEffect();
 
             }
             else
             {
                 Debug.Log(transform.name + ": なかま");
+                audio.PlayOneShot(_nakama);
             }
         }
     }
@@ -149,6 +161,31 @@ public class PlayerController2 : MonoBehaviour
         on_damage = false;
     }
 
+    void OnDamageEffect()
+    {
+        // ダメージフラグON
+        on_damage = true;
 
+
+
+        /*
+        // プレイヤーの位置を後ろに飛ばす
+        float s = 100f * Time.deltaTime;
+        transform.Translate(Vector3.up * s);
+
+        // プレイヤーのlocalScaleでどちらを向いているのかを判定
+        if (transform.localScale.x >= 0)
+        {
+            transform.Translate(Vector3.left * s);
+        }
+        else
+        {
+            transform.Translate(Vector3.right * s);
+        }
+        */
+
+        // コルーチン開始
+        StartCoroutine("WaitForIt");
+    }
 
 }
