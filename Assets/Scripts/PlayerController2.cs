@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController2 : MonoBehaviour
 {
@@ -26,16 +27,23 @@ public class PlayerController2 : MonoBehaviour
     public bool on_damage = false;
 
     public float bounce = 5.0f;
+    int _hp = 20;
+    public Text _hpTextUI;
+    string _hpText;
+    public GameObject _hpTextObj;
+    public string objname = "";
 
 
     void Start()
     {
+        Debug.Log(transform.name + ": " + _hp);
         //Rigidbodyを取得
         rb = GetComponent<Rigidbody>();
         //ユニティちゃんの現在より少し前の位置を保存
         playerPos = transform.position;
         Debug.Log(transform.tag);
         audio = gameObject.AddComponent<AudioSource>();
+        
     }
 
     void Update()
@@ -136,13 +144,17 @@ public class PlayerController2 : MonoBehaviour
         {
             if (this.gameObject.tag == "Fruit" && !on_damage)
             {
-                rb.AddForce(2,2,2, ForceMode.Impulse);
 
                 Debug.Log(transform.name + ": ぎゃー");
                 audio.PlayOneShot(_bite);
-
+                _hp -= 5;
+                Debug.Log(transform.name + ": " + _hp);
                 OnDamageEffect();
 
+            }
+            else if(this.gameObject.tag == "Fruit" && on_damage)
+            {
+                Debug.Log(transform.name + ": 無敵時間");
             }
             else
             {
