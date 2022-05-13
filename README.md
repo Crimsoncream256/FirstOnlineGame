@@ -9,6 +9,10 @@ ForkはFruitを捕まえたら勝ち、FruitはForkから逃げ切ったら勝�
 制限時間は10秒
 
 # わからないこと
-・chinemachineでInstantiateされたオブジェクトを追従する
+いまは特にない
 
-・各プレイヤー(cube)の動きをオンライン上で同期する
+# いま取り組んでいること
+・各プレイヤー(今はcylinder)の動きをオンライン上で同期する
+
+# 解決したこと
+2022年5月14日: chinemachineでInstantiateされたオブジェクトを追従する
