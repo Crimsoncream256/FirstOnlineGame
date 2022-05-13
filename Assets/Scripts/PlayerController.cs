@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     public float _moveTurnSpeed = 10f;
 
     public bool _ground = true;
-    int _key = 0;
+    int _key = 0;   
 
     void Start()
     {

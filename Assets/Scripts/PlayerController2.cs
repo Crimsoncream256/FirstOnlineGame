@@ -17,12 +17,15 @@ public class PlayerController2 : MonoBehaviour
     bool Ground = true;
     int key = 0;
 
+    public bool _invincible;
+
     void Start()
     {
         //Rigidbodyを取得
         rb = GetComponent<Rigidbody>();
         //ユニティちゃんの現在より少し前の位置を保存
         playerPos = transform.position;
+        Debug.Log(transform.tag);
     }
 
     void Update()
@@ -96,6 +99,33 @@ public class PlayerController2 : MonoBehaviour
         {
             if (!Ground)
                 Ground = true;
+        }
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        if(other.gameObject.tag == "Fruit")
+        {
+            if (this.gameObject.tag == "Fork")
+            {
+                Debug.Log("もぐもぐ");
+            }
+            else
+            {
+                Debug.Log("なかま");
+            }
+        }
+
+        if(other.gameObject.tag == "Fork")
+        {
+            if(this.gameObject.tag == "Fruit")
+            {
+                Debug.Log("ぎゃー");
+            }
+            else
+            {
+                Debug.Log("なかま");
+            }
         }
     }
 
