@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     public float _speed = 2.0f;
     public float _brake = 0.5f;
-    public float _jumpForce = 1.0f;
+    public float _jumpForce = 5.0f;
 
     private Vector3 _height;
     private Rigidbody _rB;
@@ -14,12 +15,31 @@ public class PlayerController : MonoBehaviour
     Vector3 _moveDirection;
     public float _moveTurnSpeed = 10f;
 
-    public bool _ground = true;
-    int _key = 0;   
+    [SerializeField] bool _ground = true;
+    int _key = 0;
+
+    public new AudioSource audio;
+    public AudioClip _bite;
+    public AudioClip _nakama;
+
+    public PlayerController2 _p2;
+    public NPCObject _npc;
+    public bool on_damage = false;
+
+    public float bounce = 5.0f;
+    int _hp = 20;
+    public Text _hpTextUI;
+    string _hpText;
+    public GameObject _hpTextObj;
+    public string objname = "";
 
     void Start()
     {
+        Debug.Log(transform.name + ": " + _hp);
         _rB = GetComponent<Rigidbody>();
+        Debug.Log(transform.tag);
+        audio = gameObject.AddComponent<AudioSource>();
+        _ground = true;
     }
 
     void FixedUpdate()
@@ -60,23 +80,76 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider col)
     {
-        /*
-        if (other.gameObject.tag == "Goal")
+        Debug.Log("なんか入った");
+        if (col.gameObject.tag == "Ground")
         {
-            //other.gameObject.GetComponent<Renderer>().material.color = new Color(1, 0, 0, 1);
-            rB.AddForce(-rbVelo.x * 0.8f, 0, -rbVelo.z * 0.8f, ForceMode.Impulse);
-            //goalText.enabled = true;
-            goalOn = true;
-        }
-        */
-
-        if (other.gameObject.tag == "Ground")
-        {
+            Debug.Log("じめん");
             if (!_ground)
                 _ground = true;
         }
+    }
 
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "Fruit")
+        {
+            if (this.gameObject.tag == "Fork")
+            {
+                Debug.Log(transform.name + ": もぐもぐ");
+                Vector3 norm = other.contacts[0].normal;
+                Vector3 vel = other.rigidbody.velocity.normalized;
+                vel += new Vector3(-norm.x * 2, 0f, -norm.z * 2);
+                other.rigidbody.AddForce(vel * bounce, ForceMode.Impulse);
+                audio.PlayOneShot(_bite);
+            }
+            else
+            {
+                Debug.Log(transform.name + ": なかま");
+                audio.PlayOneShot(_nakama);
+            }
+        }
+
+        if (other.gameObject.tag == "Fork")
+        {
+            if (this.gameObject.tag == "Fruit" && !on_damage)
+            {
+
+                Debug.Log(transform.name + ": ぎゃー");
+                audio.PlayOneShot(_bite);
+                _hp -= 5;
+                Debug.Log(transform.name + ": " + _hp);
+                OnDamageEffect();
+
+            }
+            else if (this.gameObject.tag == "Fruit" && on_damage)
+            {
+                Debug.Log(transform.name + ": 無敵時間");
+            }
+            else
+            {
+                Debug.Log(transform.name + ": なかま");
+                audio.PlayOneShot(_nakama);
+            }
+        }
+    }
+
+    IEnumerator WaitForIt()
+    {
+        // 1秒間処理を止める
+        yield return new WaitForSeconds(1);
+
+        // １秒後ダメージフラグをfalseにする
+        on_damage = false;
+    }
+
+    void OnDamageEffect()
+    {
+        // ダメージフラグON
+        on_damage = true;
+
+        // コルーチン開始
+        StartCoroutine("WaitForIt");
     }
 }

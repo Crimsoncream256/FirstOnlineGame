@@ -3,16 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Cinemachine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
 
     public int _fruitOrFork;
     private string _log;
     public Text _message;
     public GameObject _fruit;
     public GameObject _fork;
+
+    public List<GameObject> _playerPrefabs;
+
+    GameObject _player;
+
+    [SerializeField]
+    CinemachineVirtualCamera m_camera = default;
 
 
     void Start()
@@ -26,11 +33,11 @@ public class GameManager : MonoBehaviour
         {
             case 1:
                 _log = "Fruit";
-                Instantiate(_fruit);
+                _player = Instantiate(_fruit);
                 break;
             case 2:
                 _log = "Fork";
-                Instantiate(_fork);
+                _player = Instantiate(_fork);
                 break;
             default:
                 _log = "–³";
@@ -39,7 +46,8 @@ public class GameManager : MonoBehaviour
         Debug.Log("‚ ‚È‚½‚Í" +_log+ "‚Å‚·");
         _message.text = "‚ ‚È‚½‚Í"+_log+"‚Å‚·";
 
-        
+        m_camera.Follow = _player.transform;
+        m_camera.LookAt = _player.transform;
 
     }
 

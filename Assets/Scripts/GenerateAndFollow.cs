@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 public class GenerateAndFollow : MonoBehaviour
 {
-    [SerializeField]
-    GameObject m_testPlayerPrefab = default;
+    private int _fruitOrFork;
+
+    //[SerializeField] GameObject m_testPlayerPrefab = default;
 
     public List<GameObject> _playerPrefabs;
 
-    [SerializeField]
-    float m_moveSpeed = 5.0f;
+    //[SerializeField] float m_moveSpeed = 5.0f;
 
     [SerializeField]
     CinemachineVirtualCamera m_camera = default;
@@ -19,7 +19,8 @@ public class GenerateAndFollow : MonoBehaviour
 
     void Start()
     {
-        _player = Instantiate(m_testPlayerPrefab);
+        //_player = Instantiate(m_testPlayerPrefab);
+        //_playerPrefabs = Instantiate(Random.Range 0,1);
         m_camera.Follow = _player.transform;
         m_camera.LookAt = _player.transform;
     }
