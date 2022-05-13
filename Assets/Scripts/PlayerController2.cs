@@ -17,7 +17,14 @@ public class PlayerController2 : MonoBehaviour
     bool Ground = true;
     int key = 0;
 
-    public bool _invincible;
+    public new AudioSource audio;
+    public AudioClip _bite;
+
+    public PlayerController2 _p2;
+    public NPCObject _npc;
+    public bool on_damage = false;
+
+
 
     void Start()
     {
@@ -26,6 +33,7 @@ public class PlayerController2 : MonoBehaviour
         //ユニティちゃんの現在より少し前の位置を保存
         playerPos = transform.position;
         Debug.Log(transform.tag);
+        audio = gameObject.AddComponent<AudioSource>();
     }
 
     void Update()
@@ -108,11 +116,12 @@ public class PlayerController2 : MonoBehaviour
         {
             if (this.gameObject.tag == "Fork")
             {
-                Debug.Log("もぐもぐ");
+                Debug.Log(transform.name+": もぐもぐ");
+                audio.PlayOneShot(_bite);
             }
             else
             {
-                Debug.Log("なかま");
+                Debug.Log(transform.name + ": なかま");
             }
         }
 
@@ -120,13 +129,24 @@ public class PlayerController2 : MonoBehaviour
         {
             if(this.gameObject.tag == "Fruit")
             {
-                Debug.Log("ぎゃー");
+                Debug.Log(transform.name + ": ぎゃー");
+                audio.PlayOneShot(_bite);
+
             }
             else
             {
-                Debug.Log("なかま");
+                Debug.Log(transform.name + ": なかま");
             }
         }
+    }
+
+    IEnumerator WaitForIt()
+    {
+        // 1秒間処理を止める
+        yield return new WaitForSeconds(1);
+
+        // １秒後ダメージフラグをfalseにする
+        on_damage = false;
     }
 
 
