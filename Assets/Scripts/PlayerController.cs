@@ -47,9 +47,15 @@ public class PlayerController : MonoBehaviour
 
         rbVelo = Vector3.zero;
         float x = Input.GetAxis("Horizontal");
+
+        //transform.position += transform.forward * 10f * Time.deltaTime;
+
         float z = Input.GetAxis("Vertical");
 
-        _moveDirection = new Vector3(x * _speed, 0, z * _speed);
+        var horizontalRotation = Quaternion.AngleAxis(Camera.main.transform.eulerAngles.y, Vector3.up);
+
+        _moveDirection =  new Vector3(x * _speed, 0, z * _speed);
+
         if (_moveDirection.magnitude > 0.01f && !(Input.GetKey(KeyCode.LeftShift)))
         {
             Quaternion moveRot = Quaternion.LookRotation(_moveDirection);
@@ -58,6 +64,8 @@ public class PlayerController : MonoBehaviour
 
         rbVelo = _rB.velocity;
         _rB.AddForce(x * _speed - rbVelo.x * _brake, 0, z * _speed - rbVelo.z * _brake, ForceMode.Impulse);
+        //_rB.AddForce(x * horizontalRotation * _speed, 0, z * horizontalRotation * _speed, ForceMode.Impulse);
+        //_rB.AddForce(horizontalRotation * transform.forward * x *_speed * z *_speed, ForceMode.Impulse);
 
 
         _height = this.GetComponent<Transform>().position;
